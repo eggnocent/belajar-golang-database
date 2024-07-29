@@ -21,3 +21,27 @@ func TestExecSql(t *testing.T) {
 	}
 	fmt.Println("success import new customer")
 }
+
+func TestQuerySql(t *testing.T) {
+	db := GetConnection()
+	defer db.Close()
+
+	ctx := context.Background()
+
+	script := "SELECT id,name FROM customer"
+	rows, err := db.QueryContext(ctx, script)
+	if err != nil {
+		panic(err)
+	}
+	defer rows.Close()
+
+	for rows.Next() {
+		var id, name string
+		rows.Scan(&id, &name)
+		if err != nil {
+			panic(err)
+		}
+		fmt.Println("id:", id)
+		fmt.Println("nama:", name)
+	}
+}
