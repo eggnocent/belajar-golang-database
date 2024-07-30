@@ -4,6 +4,7 @@ import (
 	"context"
 	"database/sql"
 	"fmt"
+	"strconv"
 	"testing"
 	"time"
 )
@@ -183,4 +184,24 @@ func TestAutoIncrement(t *testing.T) {
 		panic(err)
 	}
 	fmt.Println("success insert new comment with id", insertId)
+}
+
+func TestPrepareStatement(t *testing.T) {
+	db := GetConnection()
+	defer db.Close()
+
+	ctx := context.Background()
+	script := "INSERT INTO comments(email, comment) VALUES(?,?)"
+	statement, err := db.PrepareContext(ctx, script)
+	if err != nil {
+		panic(err)
+	}
+	defer statement.Close()
+
+	for i := 0; i < 10; i++ {
+		email := "egi" + strconv.Itoa(i) + "@pss.com"
+		comment := "komentar ke " + strconv.Itoa(i)
+
+		statement.ExecContext(ctx, email, comment)
+	}
 }
