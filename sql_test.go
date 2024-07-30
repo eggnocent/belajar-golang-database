@@ -202,6 +202,14 @@ func TestPrepareStatement(t *testing.T) {
 		email := "egi" + strconv.Itoa(i) + "@pss.com"
 		comment := "komentar ke " + strconv.Itoa(i)
 
-		statement.ExecContext(ctx, email, comment)
+		result, err := statement.ExecContext(ctx, email, comment)
+		if err != nil {
+			panic(err)
+		}
+		id, err := result.LastInsertId()
+		if err != nil {
+			panic(err)
+		}
+		fmt.Println("Comment Id", id)
 	}
 }
