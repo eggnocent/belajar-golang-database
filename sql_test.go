@@ -153,7 +153,7 @@ func TestExecSqlParameter(t *testing.T) {
 
 	ctx := context.Background()
 
-	username := "egi"
+	username := "egi; DROP TABLE user; #"
 	password := "rahasia"
 
 	script := "INSERT INTO user(username, password) VALUES(?,?)"
@@ -162,4 +162,25 @@ func TestExecSqlParameter(t *testing.T) {
 		panic(err)
 	}
 	fmt.Println("success import new user")
+}
+
+func TestAutoIncrement(t *testing.T) {
+	db := GetConnection()
+	defer db.Close()
+
+	ctx := context.Background()
+
+	email := "fian@example.com"
+	comment := "test komen"
+
+	script := "INSERT INTO comments(email, comment) VALUES(?,?)"
+	result, err := db.ExecContext(ctx, script, email, comment)
+	if err != nil {
+		panic(err)
+	}
+	insertId, err := result.LastInsertId()
+	if err != nil {
+		panic(err)
+	}
+	fmt.Println("success insert new comment with id", insertId)
 }
