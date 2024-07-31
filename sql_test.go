@@ -226,5 +226,9 @@ func TestTransaction(t *testing.T) {
 
 	// do transaction here
 
-	tx.Commit()
+	err := tx.Commit()
+	if err != nil {
+		panic(err)
+	}
+
 }
