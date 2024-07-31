@@ -224,9 +224,24 @@ func TestTransaction(t *testing.T) {
 		panic(err)
 	}
 
-	// do transaction here
+	script := "INSERT INTO comments(email, comment) VALUES(?,?)"
 
-	err := tx.Commit()
+	for i := 0; i < 10; i++ {
+		email := "egi" + strconv.Itoa(i) + "@pss.com"
+		comment := "komentar ke " + strconv.Itoa(i)
+
+		result, err := tx.ExecContext(ctx, script, email, comment)
+		if err != nil {
+			panic(err)
+		}
+		id, err := result.LastInsertId()
+		if err != nil {
+			panic(err)
+		}
+		fmt.Println("Comment Id", id)
+	}
+
+	err = tx.Rollback()
 	if err != nil {
 		panic(err)
 	}
