@@ -15,7 +15,7 @@ func TestCommentInsert(t *testing.T) {
 
 	ctx := context.Background()
 	comment := entity.Comment{
-		Email:   "repository@test.go",
+		Email:   "repositoryyy@test.go",
 		Comment: "Test repository",
 	}
 
@@ -24,4 +24,32 @@ func TestCommentInsert(t *testing.T) {
 		panic(err)
 	}
 	fmt.Println(result)
+}
+
+func TestFindById(t *testing.T) {
+	commentRepository := NewCommentRepository(belajar_golang_database.GetConnection())
+
+	comment, err := commentRepository.FindById(context.Background(), 44)
+	if err != nil {
+		panic(err)
+	}
+	fmt.Println(comment)
+}
+
+func TestFindAll(t *testing.T) {
+	commentRepository := NewCommentRepository(belajar_golang_database.GetConnection())
+
+	commentalls, err := commentRepository.FindAll(context.Background())
+	if err != nil {
+		panic(err)
+	}
+
+	// lihat ada berapa dengan perulangan
+	for _, commentall := range commentalls {
+		fmt.Println(commentall)
+	}
+
+	//lihat dengan isi nya
+	//fmt.Println(commentalls)
+
 }
