@@ -213,3 +213,18 @@ func TestPrepareStatement(t *testing.T) {
 		fmt.Println("Comment Id", id)
 	}
 }
+
+func TestTransaction(t *testing.T) {
+	db := GetConnection()
+	defer db.Close()
+
+	ctx := context.Background()
+	tx, err := db.Begin()
+	if err != nil {
+		panic(err)
+	}
+
+	// do transaction here
+
+	tx.Commit()
+}
